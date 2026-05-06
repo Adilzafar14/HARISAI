@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HarisAI — Guarding Every Step of the Sacred Journey</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Tajawal:wght@300;400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --green: #006C35;
+  --green-light: #008C45;
+  --green-dim: rgba(0,108,53,0.15);
+  --gold: #C9A84C;
+  --gold-light: #F0D080;
+  --gold-dim: rgba(201,168,76,0.15);
+  --bg: #070A07;
+  --bg2: #0D110D;
+  --text: #E8E3D9;
+  --dim: #6B7A6B;
+  --white: #FFFFFF;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Tajawal', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* ── NOISE TEXTURE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.4;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 60px;
+  background: rgba(7,10,7,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(201,168,76,0.1);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.nav-logo-icon {
+  width: 38px;
+  height: 38px;
+}
+
+.nav-logo-text {
+  font-family: 'Cinzel', serif;
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--dim);
+  text-decoration: none;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover { color: var(--gold); }
+
+.nav-cta {
+  padding: 10px 24px;
+  background: var(--green);
+  border: 1px solid var(--green-light);
+  border-radius: 6px;
+  color: white !important;
+  font-weight: 700;
+  transition: all 0.3s !important;
+}
+
+.nav-cta:hover {
+  background: var(--green-light) !important;
+  box-shadow: 0 0 20px rgba(0,108,53,0.4);
+  color: white !important;
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 120px 60px 80px;
+}
+
+/* BG radial glows */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -200px; left: 50%;
+  transform: translateX(-50%);
+  width: 800px; height: 800px;
+  background: radial-gradient(ellipse, rgba(0,108,53,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -100px; right: -100px;
+  width: 500px; height: 500px;
+  background: radial-gradient(ellipse, rgba(201,168,76,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Grid lines bg */
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(201,168,76,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,168,76,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+
+.hero-content {
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+  animation: heroFadeIn 1.2s ease forwards;
+}
+
+@keyframes heroFadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border: 1px solid var(--gold-dim);
+  border-radius: 20px;
+  background: rgba(201,168,76,0.05);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 30px;
+}
+
+.badge-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green-light);
+  animation: blink 1.4s infinite;
+}
+
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.hero h1 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(48px, 8vw, 96px);
+  font-weight: 900;
+  line-height: 1.0;
+  letter-spacing: 0.05em;
+  margin-bottom: 16px;
+}
+
+.hero h1 .green { color: var(--green-light); }
+.hero h1 .gold  { color: var(--gold); }
+
+.hero-arabic {
+  font-family: 'Tajawal', sans-serif;
+  font-size: 22px;
+  color: var(--gold);
+  margin-bottom: 24px;
+  opacity: 0.8;
+  direction: rtl;
+}
+
+.hero-sub {
+  font-size: 18px;
+  color: var(--dim);
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto 48px;
+}
+
+.hero-sub span { color: var(--text); }
+
+.hero-btns {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 60px;
+}
+
+.btn-primary {
+  padding: 16px 36px;
+  background: var(--green);
+  border: 1px solid var(--green-light);
+  border-radius: 8px;
+  color: white;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s;
+  letter-spacing: 0.05em;
+}
+
+.btn-primary:hover {
+  background: var(--green-light);
+  box-shadow: 0 0 30px rgba(0,108,53,0.4);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  padding: 16px 36px;
+  background: transparent;
+  border: 1px solid var(--gold-dim);
+  border-radius: 8px;
+  color: var(--gold);
+  font-family: 'Tajawal', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s;
+  letter-spacing: 0.05em;
+}
+
+.btn-secondary:hover {
+  background: var(--gold-dim);
+  border-color: var(--gold);
+  transform: translateY(-2px);
+}
+
+/* Stats bar */
+.hero-stats {
+  display: flex;
+  gap: 0;
+  justify-content: center;
+  border: 1px solid rgba(201,168,76,0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.02);
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.stat-item {
+  flex: 1;
+  padding: 20px;
+  text-align: center;
+  border-right: 1px solid rgba(201,168,76,0.1);
+  position: relative;
+}
+
+.stat-item:last-child { border-right: none; }
+
+.stat-num {
+  font-family: 'Cinzel', serif;
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: var(--dim);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ── HOW IT WORKS ── */
+.section {
+  padding: 100px 60px;
+  position: relative;
+}
+
+.section-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--green-light);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-label::before {
+  content: '';
+  width: 30px; height: 1px;
+  background: var(--green-light);
+}
+
+.section-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 900;
+  color: var(--text);
+  margin-bottom: 16px;
+  line-height: 1.1;
+}
+
+.section-title .gold { color: var(--gold); }
+
+.section-sub {
+  font-size: 16px;
+  color: var(--dim);
+  max-width: 500px;
+  line-height: 1.7;
+  margin-bottom: 60px;
+}
+
+/* Flow diagram */
+.flow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  position: relative;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.flow::before {
+  content: '';
+  position: absolute;
+  top: 50px;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-dim), var(--gold), var(--gold-dim), transparent);
+}
+
+.flow-item {
+  text-align: center;
+  padding: 30px 20px;
+  position: relative;
+}
+
+.flow-icon {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  border: 1px solid var(--gold-dim);
+  background: rgba(201,168,76,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  margin: 0 auto 20px;
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s;
+}
+
+.flow-item:hover .flow-icon {
+  background: rgba(201,168,76,0.12);
+  border-color: var(--gold);
+  box-shadow: 0 0 30px rgba(201,168,76,0.2);
+  transform: translateY(-4px);
+}
+
+.flow-num {
+  position: absolute;
+  top: -8px; right: -8px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--green);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Share Tech Mono', monospace;
+}
+
+.flow-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.flow-desc {
+  font-size: 12px;
+  color: var(--dim);
+  line-height: 1.6;
+}
+
+/* ── GESTURES ── */
+.gestures-section {
+  padding: 100px 60px;
+  background: var(--bg2);
+  border-top: 1px solid rgba(201,168,76,0.06);
+  border-bottom: 1px solid rgba(201,168,76,0.06);
+}
+
+.gestures-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.gesture-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 12px;
+  padding: 32px 20px;
+  text-align: center;
+  transition: all 0.3s;
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+}
+
+.gesture-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  transform: scaleX(0);
+  transition: transform 0.3s;
+}
+
+.gesture-card:hover::before { transform: scaleX(1); }
+
+.gesture-card:hover {
+  background: rgba(201,168,76,0.04);
+  border-color: rgba(201,168,76,0.2);
+  transform: translateY(-4px);
+}
+
+.gesture-card.emergency:hover {
+  background: rgba(255,59,48,0.05);
+  border-color: rgba(255,59,48,0.3);
+}
+
+.gesture-card.emergency::before {
+  background: linear-gradient(90deg, transparent, #ff3b30, transparent);
+}
+
+.gesture-emoji { font-size: 48px; margin-bottom: 16px; }
+
+.gesture-name {
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.gesture-card.emergency .gesture-name { color: #ff6b6b; }
+
+.gesture-action {
+  font-size: 12px;
+  color: var(--dim);
+  line-height: 1.5;
+}
+
+/* ── FEATURES ── */
+.features-section { padding: 100px 60px; }
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 12px;
+  padding: 32px;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--green-light), transparent);
+  transform: scaleX(0);
+  transition: transform 0.4s;
+}
+
+.feature-card:hover::after { transform: scaleX(1); }
+
+.feature-card:hover {
+  background: rgba(0,108,53,0.04);
+  border-color: rgba(0,108,53,0.2);
+  transform: translateY(-3px);
+}
+
+.feature-icon {
+  font-size: 28px;
+  margin-bottom: 16px;
+}
+
+.feature-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+.feature-desc {
+  font-size: 13px;
+  color: var(--dim);
+  line-height: 1.7;
+}
+
+.feature-tag {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 3px 10px;
+  border-radius: 10px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  background: rgba(0,108,53,0.1);
+  border: 1px solid rgba(0,108,53,0.3);
+  color: var(--green-light);
+}
+
+/* ── ZONES ── */
+.zones-section {
+  padding: 100px 60px;
+  background: var(--bg2);
+  border-top: 1px solid rgba(201,168,76,0.06);
+}
+
+.zones-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.zones-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.zone-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 10px;
+  transition: all 0.3s;
+}
+
+.zone-item:hover {
+  background: rgba(201,168,76,0.04);
+  border-color: rgba(201,168,76,0.15);
+}
+
+.zone-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.zone-dot.safe     { background: #30d158; box-shadow: 0 0 8px #30d158; }
+.zone-dot.moderate { background: #ffd60a; box-shadow: 0 0 8px #ffd60a; }
+.zone-dot.high     { background: #ff9500; box-shadow: 0 0 8px #ff9500; }
+
+.zone-name {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.zone-sub {
+  font-size: 11px;
+  color: var(--dim);
+}
+
+.zone-count {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 18px;
+  color: var(--gold);
+}
+
+.zones-visual {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(201,168,76,0.1);
+  border-radius: 16px;
+  padding: 32px;
+  text-align: center;
+}
+
+.zones-visual-title {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--green-light);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.kaaba-svg {
+  width: 160px;
+  height: 160px;
+  margin: 0 auto 24px;
+  position: relative;
+}
+
+.ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  animation: ringPulse 3s ease-in-out infinite;
+}
+
+.ring1 { width: 60px; height: 60px; border-color: rgba(201,168,76,0.8); }
+.ring2 { width: 100px; height: 100px; border-color: rgba(201,168,76,0.4); animation-delay: 0.5s; }
+.ring3 { width: 140px; height: 140px; border-color: rgba(201,168,76,0.2); animation-delay: 1s; }
+
+@keyframes ringPulse {
+  0%,100% { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+  50% { transform: translate(-50%,-50%) scale(1.05); opacity: 0.7; }
+}
+
+.kaaba-center {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 28px;
+}
+
+.zones-live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: rgba(48,209,88,0.08);
+  border: 1px solid rgba(48,209,88,0.2);
+  border-radius: 20px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: #30d158;
+  letter-spacing: 0.1em;
+}
+
+/* ── VISION 2030 ── */
+.vision-section {
+  padding: 100px 60px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.vision-section::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px; height: 600px;
+  background: radial-gradient(ellipse, rgba(0,108,53,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.vision-flags {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 48px;
+}
+
+.flag-tag {
+  padding: 6px 16px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 20px;
+  font-size: 13px;
+  color: var(--dim);
+  transition: all 0.3s;
+}
+
+.flag-tag:hover {
+  border-color: var(--gold-dim);
+  color: var(--gold);
+  background: var(--gold-dim);
+}
+
+.vision-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  max-width: 900px;
+  margin: 0 auto 60px;
+}
+
+.vision-item {
+  padding: 28px 16px;
+  background: rgba(0,108,53,0.04);
+  border: 1px solid rgba(0,108,53,0.12);
+  border-radius: 12px;
+  transition: all 0.3s;
+}
+
+.vision-item:hover {
+  background: rgba(0,108,53,0.08);
+  border-color: rgba(0,108,53,0.25);
+  transform: translateY(-3px);
+}
+
+.vision-icon { font-size: 28px; margin-bottom: 12px; }
+.vision-text { font-size: 13px; color: var(--dim); line-height: 1.5; }
+.vision-text strong { color: var(--text); display: block; margin-bottom: 4px; }
+
+/* ── CTA ── */
+.cta-section {
+  padding: 100px 60px;
+  background: var(--bg2);
+  border-top: 1px solid rgba(201,168,76,0.08);
+  text-align: center;
+}
+
+.cta-box {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 60px;
+  background: linear-gradient(135deg, rgba(0,108,53,0.08), rgba(201,168,76,0.04));
+  border: 1px solid rgba(201,168,76,0.15);
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-box::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.cta-box h2 {
+  font-family: 'Cinzel', serif;
+  font-size: 36px;
+  font-weight: 900;
+  color: var(--gold);
+  margin-bottom: 16px;
+}
+
+.cta-box p {
+  color: var(--dim);
+  font-size: 15px;
+  margin-bottom: 36px;
+  line-height: 1.7;
+}
+
+.cta-email {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  color: var(--green-light);
+  margin-top: 20px;
+}
+
+/* ── FOOTER ── */
+footer {
+  padding: 40px 60px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-logo {
+  font-family: 'Cinzel', serif;
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--gold);
+}
+
+.footer-arabic {
+  font-family: 'Tajawal', sans-serif;
+  font-size: 13px;
+  color: var(--dim);
+  direction: rtl;
+}
+
+.footer-links {
+  display: flex;
+  gap: 24px;
+}
+
+.footer-links a {
+  color: var(--dim);
+  text-decoration: none;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover { color: var(--gold); }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  nav { padding: 16px 24px; }
+  .nav-links { display: none; }
+  .hero { padding: 100px 24px 60px; }
+  .section { padding: 60px 24px; }
+  .gestures-section { padding: 60px 24px; }
+  .features-section { padding: 60px 24px; }
+  .zones-section { padding: 60px 24px; }
+  .vision-section { padding: 60px 24px; }
+  .cta-section { padding: 60px 24px; }
+  footer { padding: 30px 24px; flex-direction: column; gap: 16px; text-align: center; }
+  .flow { grid-template-columns: repeat(2, 1fr); }
+  .flow::before { display: none; }
+  .gestures-grid { grid-template-columns: repeat(2, 1fr); }
+  .features-grid { grid-template-columns: 1fr; }
+  .zones-wrapper { grid-template-columns: 1fr; }
+  .vision-grid { grid-template-columns: repeat(2, 1fr); }
+  .hero-stats { flex-direction: column; }
+  .stat-item { border-right: none; border-bottom: 1px solid rgba(201,168,76,0.1); }
+  .stat-item:last-child { border-bottom: none; }
+  .cta-box { padding: 40px 24px; }
+}
+
+/* ── ENTRANCE ANIMATIONS ── */
+.fade-up {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <svg class="nav-logo-icon" viewBox="0 0 38 38" fill="none">
+      <path d="M19 2L35 10V28L19 36L3 28V10L19 2Z" fill="rgba(0,108,53,0.15)" stroke="#C9A84C" stroke-width="1.5"/>
+      <text x="19" y="24" text-anchor="middle" font-size="16" fill="#C9A84C">🖐</text>
+    </svg>
+    <span class="nav-logo-text">HARISAI</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#zones">Zones</a></li>
+    <li><a href="#contact" class="nav-cta">Request Demo</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Vision 2030 Aligned · AI for Hajj
+    </div>
+    <h1>
+      <span class="green">HARIS</span><span class="gold">AI</span>
+    </h1>
+    <div class="hero-arabic">ذكاء لخدمة الحجاج</div>
+    <p class="hero-sub">
+      Guarding Every Step of the Sacred Journey.<br>
+      <span>AI-powered gesture recognition + real-time crowd intelligence</span>
+      for <span>2.5 million Hajj pilgrims</span>.
+    </p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-primary">🎯 Request Demo</a>
+      <a href="#how" class="btn-secondary">How It Works →</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">2.5M</div>
+        <div class="stat-label">Pilgrims Protected</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">6</div>
+        <div class="stat-label">Languages</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">5</div>
+        <div class="stat-label">Sacred Zones</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">&lt;100ms</div>
+        <div class="stat-label">Response Time</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="how">
+  <div class="section-label">System Flow</div>
+  <h2 class="section-title fade-up">How <span class="gold">HarisAI</span> Works</h2>
+  <p class="section-sub fade-up">From camera to response in under 100 milliseconds — no internet required.</p>
+  <div class="flow fade-up">
+    <div class="flow-item">
+      <div class="flow-icon">
+        📷
+        <div class="flow-num">1</div>
+      </div>
+      <div class="flow-title">CCTV Cameras</div>
+      <div class="flow-desc">Multiple live feeds from sacred zones captured in real-time</div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon">
+        🖐
+        <div class="flow-num">2</div>
+      </div>
+      <div class="flow-title">Gesture AI</div>
+      <div class="flow-desc">MediaPipe detects 21 hand landmarks per frame, classifies gesture instantly</div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon">
+        👥
+        <div class="flow-num">3</div>
+      </div>
+      <div class="flow-title">Crowd Count</div>
+      <div class="flow-desc">YOLOv8 counts people in real-time, monitors density per zone</div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-icon">
+        🔔
+        <div class="flow-num">4</div>
+      </div>
+      <div class="flow-title">Alert + Voice</div>
+      <div class="flow-desc">Instant alerts in 6 languages, admin notified, security dispatched</div>
+    </div>
+  </div>
+</section>
+
+<!-- GESTURES -->
+<section class="gestures-section" id="gestures">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="section-label">Gesture Dictionary</div>
+    <h2 class="section-title fade-up">4 Gestures. <span class="gold">Infinite Safety.</span></h2>
+    <p class="section-sub fade-up">Language-barrier-free communication between pilgrims and security teams.</p>
+    <div class="gestures-grid fade-up">
+      <div class="gesture-card">
+        <div class="gesture-emoji">✋</div>
+        <div class="gesture-name">Open Hand</div>
+        <div class="gesture-action">Help Request — Guide dispatched to your location immediately</div>
+      </div>
+      <div class="gesture-card">
+        <div class="gesture-emoji">👉</div>
+        <div class="gesture-name">Point</div>
+        <div class="gesture-action">Navigation — Route highlighted, directions given in your language</div>
+      </div>
+      <div class="gesture-card">
+        <div class="gesture-emoji">✌️</div>
+        <div class="gesture-name">V-Sign</div>
+        <div class="gesture-action">Lost Pilgrim — Group finder activated, family located instantly</div>
+      </div>
+      <div class="gesture-card emergency">
+        <div class="gesture-emoji">✊</div>
+        <div class="gesture-name">Closed Fist</div>
+        <div class="gesture-action">Emergency SOS — All security units alerted simultaneously</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features-section" id="features">
+  <div class="section-label">Capabilities</div>
+  <h2 class="section-title fade-up">Built for <span class="gold">Scale</span></h2>
+  <p class="section-sub fade-up">Every feature engineered for the world's largest annual gathering.</p>
+  <div class="features-grid fade-up">
+    <div class="feature-card">
+      <div class="feature-icon">📷</div>
+      <div class="feature-title">Multi-Camera CCTV</div>
+      <div class="feature-desc">Connect multiple live camera feeds simultaneously. Scalable across all 5 sacred zones with real-time switching.</div>
+      <span class="feature-tag">OpenCV · Flask</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🧠</div>
+      <div class="feature-title">YOLOv8 Crowd Detection</div>
+      <div class="feature-desc">Real-time people counting at 25-30 FPS. Density maps generated per zone with automatic alert triggers.</div>
+      <span class="feature-tag">YOLOv8 · Python</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🖐</div>
+      <div class="feature-title">MediaPipe Gesture AI</div>
+      <div class="feature-desc">21-landmark hand skeleton tracking under 100ms latency. Works in crowded environments and low light.</div>
+      <span class="feature-tag">MediaPipe · JS</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🗄️</div>
+      <div class="feature-title">Alert Database</div>
+      <div class="feature-desc">Every gesture, alert, and crowd spike stored in SQLite. Full history, exportable reports, audit trail.</div>
+      <span class="feature-tag">SQLite · REST API</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔐</div>
+      <div class="feature-title">Admin Login System</div>
+      <div class="feature-desc">Secure admin panel for security teams. Role-based access, live zone control, emergency override.</div>
+      <span class="feature-tag">Flask Auth · Sessions</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🌐</div>
+      <div class="feature-title">6-Language Voice</div>
+      <div class="feature-desc">Arabic, English, Urdu, Indonesian, Turkish, French. Real-time TTS — no translation delay, no confusion.</div>
+      <span class="feature-tag">Browser TTS · Offline</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <div class="feature-title">Live Dashboard</div>
+      <div class="feature-desc">Real-time stats, zone heatmaps, alert feed, and crowd density — all in one screen for command center.</div>
+      <span class="feature-tag">Vanilla JS · WebSocket</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📱</div>
+      <div class="feature-title">Mobile Friendly</div>
+      <div class="feature-desc">Fully responsive UI works on tablets and phones. Field agents access dashboard from any device.</div>
+      <span class="feature-tag">CSS Grid · PWA Ready</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">☁️</div>
+      <div class="feature-title">Cloud Deployable</div>
+      <div class="feature-desc">One-click deploy on Railway or Render. Offline mode available — works without internet in remote zones.</div>
+      <span class="feature-tag">Railway · Render</span>
+    </div>
+  </div>
+</section>
+
+<!-- ZONES -->
+<section class="zones-section" id="zones">
+  <div class="zones-wrapper">
+    <div>
+      <div class="section-label">Live Monitoring</div>
+      <h2 class="section-title fade-up">5 Sacred <span class="gold">Zones</span></h2>
+      <p class="section-sub fade-up">Real-time crowd density monitoring across every critical area of the Hajj journey.</p>
+      <div class="zones-list fade-up">
+        <div class="zone-item">
+          <div class="zone-dot high"></div>
+          <div>
+            <div class="zone-name">Masjid Al-Haram</div>
+            <div class="zone-sub">Main prayer area</div>
+          </div>
+          <div class="zone-count">892</div>
+        </div>
+        <div class="zone-item">
+          <div class="zone-dot moderate"></div>
+          <div>
+            <div class="zone-name">Safa–Marwa</div>
+            <div class="zone-sub">Sa'i corridor</div>
+          </div>
+          <div class="zone-count">445</div>
+        </div>
+        <div class="zone-item">
+          <div class="zone-dot high"></div>
+          <div>
+            <div class="zone-name">Mina Camp</div>
+            <div class="zone-sub">Tent city</div>
+          </div>
+          <div class="zone-count">1,231</div>
+        </div>
+        <div class="zone-item">
+          <div class="zone-dot safe"></div>
+          <div>
+            <div class="zone-name">Jamarat Bridge</div>
+            <div class="zone-sub">Stoning ritual</div>
+          </div>
+          <div class="zone-count">279</div>
+        </div>
+        <div class="zone-item">
+          <div class="zone-dot safe"></div>
+          <div>
+            <div class="zone-name">Arafat Ground</div>
+            <div class="zone-sub">Standing area</div>
+          </div>
+          <div class="zone-count">120</div>
+        </div>
+      </div>
+    </div>
+    <div class="zones-visual fade-up">
+      <div class="zones-visual-title">Live Zone Map</div>
+      <div class="kaaba-svg">
+        <div class="ring ring1"></div>
+        <div class="ring ring2"></div>
+        <div class="ring ring3"></div>
+        <div class="kaaba-center">🕋</div>
+      </div>
+      <div class="zones-live-badge">
+        <span style="width:6px;height:6px;border-radius:50%;background:#30d158;display:inline-block;animation:blink 1.4s infinite"></span>
+        LIVE MONITORING ACTIVE
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VISION 2030 -->
+<section class="vision-section" id="vision">
+  <div class="section-label" style="justify-content:center;">Vision 2030</div>
+  <h2 class="section-title fade-up">Built for <span class="gold">Saudi Arabia</span></h2>
+  <p class="section-sub fade-up" style="margin:0 auto 40px;">HarisAI directly supports the Kingdom's Vision 2030 goals for smart cities, digital economy, and pilgrim experience.</p>
+  <div class="vision-flags fade-up">
+    <span class="flag-tag">🕌 Ministry of Hajj and Umrah</span>
+    <span class="flag-tag">🤖 SDAIA</span>
+    <span class="flag-tag">🏙️ Smart Makkah Initiative</span>
+    <span class="flag-tag">📊 General Authority for Statistics</span>
+  </div>
+  <div class="vision-grid fade-up">
+    <div class="vision-item">
+      <div class="vision-icon">🏙️</div>
+      <div class="vision-text"><strong>Smart Cities</strong>AI-powered sacred space monitoring</div>
+    </div>
+    <div class="vision-item">
+      <div class="vision-icon">🕌</div>
+      <div class="vision-text"><strong>Pilgrim Experience</strong>Language-barrier-free assistance</div>
+    </div>
+    <div class="vision-item">
+      <div class="vision-icon">🛡️</div>
+      <div class="vision-text"><strong>Public Safety</strong>Real-time crowd emergency detection</div>
+    </div>
+    <div class="vision-item">
+      <div class="vision-icon">🤖</div>
+      <div class="vision-text"><strong>Digital Economy</strong>Homegrown AI for Hajj ecosystem</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <div class="cta-box fade-up">
+    <h2>Ready to Deploy?</h2>
+    <p>HarisAI is ready for pilot deployment across Hajj sacred zones. Contact us to schedule a live demo or discuss integration with existing Hajj management systems.</p>
+    <a href="mailto:adilzafar1401@gmail.com" class="btn-primary">📧 Request Demo</a>
+    <div class="cta-email">adilzafar1401@gmail.com</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">HARISAI</div>
+  <div class="footer-arabic">ذكاء لخدمة الحجاج · Vision 2030</div>
+  <div class="footer-links">
+    <a href="https://github.com/Adilzafar14" target="_blank">GitHub</a>
+    <a href="https://linkedin.com/in/adilzafar-dataanalyst" target="_blank">LinkedIn</a>
+    <a href="mailto:adilzafar1401@gmail.com">Contact</a>
+  </div>
+</footer>
+
+<script>
+// Scroll animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// Animate zone counts
+function animateCount(el, target) {
+  let current = 0;
+  const increment = target / 60;
+  const timer = setInterval(() => {
+    current += increment;
+    if (current >= target) {
+      current = target;
+      clearInterval(timer);
+    }
+    el.textContent = Math.floor(current).toLocaleString();
+  }, 16);
+}
+
+const zoneObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      document.querySelectorAll('.zone-count').forEach(el => {
+        const target = parseInt(el.textContent.replace(',', ''));
+        animateCount(el, target);
+      });
+      zoneObserver.disconnect();
+    }
+  });
+}, { threshold: 0.3 });
+
+const zonesSection = document.querySelector('.zones-section');
+if (zonesSection) zoneObserver.observe(zonesSection);
+</script>
+</body>
+</html>
