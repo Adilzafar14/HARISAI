@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HARISAI — ذكاء لخدمة الحجاج</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: #04070e;
+            color: #ddd;
+            height: 100vh;
+        }
+
+        header {
+            background: #0a0f1a;
+            border-bottom: 1px solid #c9a84c33;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: #c9a84c;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .arabic {
+            color: #888;
+            font-size: 12px;
+        }
+
+        .status {
+            background: #30d15820;
+            border: 1px solid #30d15850;
+            color: #30d158;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+            padding: 20px;
+        }
+
+        .card {
+            background: #0a0f1a;
+            border: 1px solid #c9a84c33;
+            border-radius: 10px;
+            padding: 16px;
+        }
+
+        .card h3 {
+            color: #c9a84c;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 12px;
+        }
+
+        .zone-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #ffffff10;
+        }
+
+        .zone-name { font-size: 12px; }
+
+        .zone-status {
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+        }
+
+        .safe {
+            background: #30d15820;
+            color: #30d158;
+        }
+
+        .high {
+            background: #ff950020;
+            color: #ff9500;
+        }
+
+        .critical {
+            background: #ff3b3020;
+            color: #ff3b30;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: bold;
+            color: #c9a84c;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .alert-item {
+            padding: 8px;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            font-size: 11px;
+            border-left: 3px solid;
+        }
+
+        .alert-emergency {
+            background: #ff3b3010;
+            border-color: #ff3b30;
+        }
+
+        .alert-info {
+            background: #00d4c810;
+            border-color: #00d4c8;
+        }
+
+        #login-screen {
+            position: fixed;
+            inset: 0;
+            background: #04070e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .login-box {
+            background: #0a0f1a;
+            border: 1px solid #c9a84c50;
+            border-radius: 12px;
+            padding: 40px;
+            width: 320px;
+            text-align: center;
+        }
+
+        .login-box h2 {
+            color: #c9a84c;
+            margin-bottom: 8px;
+        }
+
+        .login-box p {
+            color: #666;
+            font-size: 12px;
+            margin-bottom: 24px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            background: #ffffff10;
+            border: 1px solid #c9a84c30;
+            border-radius: 6px;
+            color: #ddd;
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #c9a84c20;
+            border: 1px solid #c9a84c;
+            border-radius: 6px;
+            color: #c9a84c;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #c9a84c40;
+        }
+
+        #error-msg {
+            color: #ff3b30;
+            font-size: 11px;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+    <div class="login-box">
+        <h2>🕌 HARISAI</h2>
+        <p>ذكاء لخدمة الحجاج</p>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <div id="error-msg"></div>
+    </div>
+</div>
+
+<!-- DASHBOARD -->
+<header>
+    <div>
+        <div class="logo">🕌 HARISAI</div>
+        <div class="arabic">ذكاء لخدمة الحجاج</div>
+    </div>
+    <div class="status">● LIVE</div>
+</header>
+
+<div class="grid">
+
+    <!-- ZONES -->
+    <div class="card">
+        <h3>📍 Sacred Zones</h3>
+        <div id="zones-list">Loading...</div>
+    </div>
+
+    <!-- STATS -->
+    <div class="card">
+        <h3>📊 Live Stats</h3>
+        <div style="text-align:center; padding: 20px 0;">
+            <div class="stat-value" id="total-people">0</div>
+            <div class="stat-label">People Detected</div>
+        </div>
+        <div style="text-align:center; padding: 10px 0;">
+            <div class="stat-value" id="total-alerts"
+                 style="font-size:28px; color:#ff9500;">0</div>
+            <div class="stat-label">Active Alerts</div>
+        </div>
+    </div>
+
+    <!-- ALERTS -->
+    <div class="card">
+        <h3>🔔 Alert Feed</h3>
+        <div id="alerts-list">No alerts yet...</div>
+    </div>
+
+</div>
+
+<script>
+    const API = 'http://127.0.0.1:5000';
+
+    // LOGIN
+    async function login() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        const res = await fetch(API + '/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        });
+
+        const data = await res.json();
+
+        if (data.status === 'success') {
+            document.getElementById('login-screen').style.display = 'none';
+            loadDashboard();
+        } else {
+            document.getElementById('error-msg').textContent = 
+                '❌ Wrong username or password!';
+        }
+    }
+
+    // LOAD ZONES
+    async function loadZones() {
+        const res = await fetch(API + '/api/zones');
+        const zones = await res.json();
+        const html = zones.map(z => `
+            <div class="zone-item">
+                <div class="zone-name">${z.name}</div>
+                <div class="zone-status ${z.status}">${z.status}</div>
+            </div>
+        `).join('');
+        document.getElementById('zones-list').innerHTML = html;
+    }
+
+    // LOAD ALERTS
+    async function loadAlerts() {
+        const res = await fetch(API + '/api/alerts');
+        const alerts = await res.json();
+        if (alerts.length === 0) {
+            document.getElementById('alerts-list').innerHTML = 
+                'No alerts yet...';
+            return;
+        }
+        const html = alerts.map(a => `
+            <div class="alert-item alert-${a.type}">
+                <strong>${a.zone}</strong> — ${a.message}
+                <div style="color:#666; font-size:10px">${a.time}</div>
+            </div>
+        `).join('');
+        document.getElementById('alerts-list').innerHTML = html;
+        document.getElementById('total-alerts').textContent = alerts.length;
+    }
+
+    // LOAD DASHBOARD
+    function loadDashboard() {
+        loadZones();
+        loadAlerts();
+        setInterval(() => {
+            loadZones();
+            loadAlerts();
+        }, 5000);
+    }
+</script>
+
+</body>
+</html>
