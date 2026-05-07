@@ -90,7 +90,7 @@
     <div class="card">
         <h3>📊 Live Stats</h3>
         <div style="padding:20px 0">
-            <div class="stat-value" id="total-people">0</div>
+            <div class="stat-value" id="total-people" >0</div>
             <div class="stat-label">People Detected</div>
         </div>
         <div style="padding:10px 0">
@@ -116,7 +116,7 @@
             <div class="gesture-name" id="g-name">Waiting...</div>
             <div class="gesture-action" id="g-action">Show hand to camera</div>
         </div>
-        <button class="start-btn" onclick="startGestureCamera()">📷 Start Gesture Camera</button>
+        <button class="start-btn" onclick="startGestureCamera(); window.speechSynthesis.speak(new SpeechSynthesisUtterance('HARISAI ready'))">📷 Start Gesture Camera</button>
     </div>
     <div class="cam-card">
         <h3>👥 Crowd Detection — HOG AI</h3>
@@ -223,7 +223,7 @@ function speak(gesture) {
         const msg = VOICE_MESSAGES[gesture][currentLang] || VOICE_MESSAGES[gesture].English;
         setTimeout(() => {
             const utter = new SpeechSynthesisUtterance(msg);
-            utter.lang = { English:'en-US', Arabic:'ar-SA', Urdu:'ur-PK', Indonesian:'id-ID', Turkish:'tr-TR', French:'fr-FR' }[currentLang] || 'en-US';
+            utter.lang = { English:'en-GB', Arabic:'ar-SA', Urdu:'ur-PK', Indonesian:'id-ID', Turkish:'tr-TR', French:'fr-FR' }[currentLang] || 'en-GB';
             utter.volume = 1;
             utter.rate = 0.9;
             utter.onerror = () => {};
@@ -332,18 +332,28 @@ function startGestureCamera() {
 
 function startCrowdCamera() {
     const video = document.getElementById('crowd-video');
+    const canvas = document.createElement('canvas');
     navigator.mediaDevices.getUserMedia({ video: true })
-        .then(stream => { video.srcObject = stream; })
+        .then(stream => {
+            video.srcObject = stream;
+            setInterval(async () => {
+                try {
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    canvas.getContext('2d').drawImage(video, 0, 0);
+                    const b64 = canvas.toDataURL('image/jpeg', 0.5).split(',')[1];
+                    const res = await fetch(API + '/api/crowd', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({frame: b64})
+                    });
+                    const data = await res.json();
+                    document.getElementById('crowd-count').textContent = data.people_count;
+                    document.getElementById('total-people').textContent = data.people_count;
+                } catch(e) {}
+            }, 2000);
+        })
         .catch(err => alert('Camera error: ' + err.message));
-    setInterval(async () => {
-        try {
-            const res = await fetch(API + '/api/zones');
-            const zones = await res.json();
-            const total = zones.reduce((s, z) => s + z.count, 0);
-            document.getElementById('crowd-count').textContent = total;
-            document.getElementById('total-people').textContent = total;
-        } catch(e) {}
-    }, 3000);
 }
 </script>
 </body>

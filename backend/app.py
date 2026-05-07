@@ -2,11 +2,17 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import sqlite3
 import datetime
+import base64
+import numpy as np
+import cv2
+from ultralytics import YOLO
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 DB_PATH = 'harisai.db'
+yolo_model = YOLO('../models/yolov8n.pt')
+print("✅ YOLO Model Loaded!")
 
 def get_db():
     conn = sqlite3.connect(DB_PATH)
@@ -50,25 +56,19 @@ def init_db():
 
 @app.route('/')
 def home():
-    return jsonify({
-        'system': 'HARISAI',
-        'status': 'running',
-        'message': 'ذكاء لخدمة الحجاج'
-    })
+    return jsonify({'system':'HARISAI','status':'running','message':'ذكاء لخدمة الحجاج'})
 
-@app.route('/api/zones', methods=['GET'])
+@app.route('/api/zones')
 def get_zones():
     conn = get_db()
     zones = conn.execute('SELECT * FROM zones').fetchall()
     conn.close()
     return jsonify([dict(z) for z in zones])
 
-@app.route('/api/alerts', methods=['GET'])
+@app.route('/api/alerts')
 def get_alerts():
     conn = get_db()
-    alerts = conn.execute(
-        'SELECT * FROM alerts ORDER BY id DESC LIMIT 20'
-    ).fetchall()
+    alerts = conn.execute('SELECT * FROM alerts ORDER BY id DESC LIMIT 20').fetchall()
     conn.close()
     return jsonify([dict(a) for a in alerts])
 
@@ -76,11 +76,9 @@ def get_alerts():
 def add_alert():
     data = request.get_json()
     conn = get_db()
-    conn.execute(
-        'INSERT INTO alerts (type, message, zone, time) VALUES (?,?,?,?)',
+    conn.execute('INSERT INTO alerts (type, message, zone, time) VALUES (?,?,?,?)',
         (data['type'], data['message'], data['zone'],
-         datetime.datetime.now().strftime('%H:%M:%S'))
-    )
+         datetime.datetime.now().strftime('%H:%M:%S')))
     conn.commit()
     conn.close()
     return jsonify({'status': 'Alert saved!'})
@@ -91,12 +89,24 @@ def login():
     conn = get_db()
     admin = conn.execute(
         'SELECT * FROM admins WHERE username=? AND password=?',
-        (data['username'], data['password'])
-    ).fetchone()
+        (data['username'], data['password'])).fetchone()
     conn.close()
     if admin:
         return jsonify({'status': 'success', 'message': 'Welcome Admin!'})
     return jsonify({'status': 'error', 'message': 'Wrong credentials!'})
+
+@app.route('/api/crowd', methods=['POST'])
+def crowd_detect():
+    try:
+        data = request.get_json()
+        img_bytes = base64.b64decode(data['frame'])
+        np_arr = np.frombuffer(img_bytes, np.uint8)
+        frame = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+        results = yolo_model(frame, verbose=False)
+        count = sum(1 for r in results for b in r.boxes if int(b.cls)==0)
+        return jsonify({'people_count': count})
+    except Exception as e:
+        return jsonify({'people_count': 0, 'error': str(e)})
 
 if __name__ == '__main__':
     init_db()
